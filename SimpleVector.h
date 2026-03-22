@@ -29,14 +29,14 @@ public:
 	}
 
 	~SimpleVector() {
-		delete[] s_vector
+		delete[] s_vector;
 	}
 
-	int* begin() {
+	T* begin() {
 		return s_vector;
 	}
 
-	int* end() {
+	T* end() {
 		return s_vector + lastElement;
 	}
 
@@ -44,7 +44,7 @@ public:
 
 		if (lastElement == iSize) {
 			iSize *= 2;
-			int* newArr = new int[iSize] {};
+			T* newArr = new T[iSize] {};
 
 			if (!newArr) {
 				std::cerr << "Allocation failed\n";

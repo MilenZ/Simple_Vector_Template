@@ -22,5 +22,13 @@ int main()
     for (int* i = sVector2.begin(); i != sVector2.end(); ++i)
         std::cout << *i << " ";
     std::cout << "\n";
+
+    SimpleVector<std::string> stringVector;
+	stringVector.push_back("Hello");
+	stringVector.push_back("World");
+    for (std::string* i = stringVector.begin(); i != stringVector.end(); ++i)
+        std::cout << *i << " ";
+    std::cout << "\n";
+
 }
 
