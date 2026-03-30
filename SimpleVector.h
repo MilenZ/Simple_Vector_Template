@@ -1,4 +1,26 @@
 
+
+// Достъп до елементи
+//  operator[] – достъп без проверка
+//  at() – достъп с проверка
+//  front() – първи елемент
+//  back() – последен елемент
+//  data() – pointer към първия елемент
+
+// Размер и капацитет
+//  size() – брой елементи
+//  capacity() – заделена памет
+//  resize() – променя броя елементи
+//  reserve() – заделя памет предварително
+//  empty() – дали е празен
+
+// Модификация
+//  clear() – изтрива всички елементи
+//  assign() – заменя съдържанието
+//  swap() – разменя съдържание с друг vector
+
+
+
 #ifndef SIMPLEVECTOR_H
 #define SIMPLEVECTOR_H
 
@@ -14,12 +36,14 @@ private:
 
 public:
     SimpleVector() {
+		std::cout << "default constructor\n";
 		//std::cout << "Simple Vector created.\n";
 		s_vector = new T[iSize]{};
 	}
 
 	SimpleVector(std::initializer_list<T> elements) : SimpleVector<T>()
 	{
+		std::cout << "constructor\n";
 		//std::cout << "Simple Vector with arguments created.\n";
 		for (int element : elements) {
 			//std::cout << element << std::endl;
@@ -29,8 +53,13 @@ public:
 	}
 
 	~SimpleVector() {
+		std::cout << "destructor\n";
 		delete[] s_vector;
 	}
+
+	// Итерация
+	//  begin(), end()
+	//  rbegin(), rend()
 
 	T* begin() {
 		return s_vector;
@@ -40,6 +69,19 @@ public:
 		return s_vector + lastElement;
 	}
 
+	T* rbegin() {
+		return s_vector + lastElement;
+	}
+
+	T* rend() {
+		return s_vector;
+	}
+
+	// Основни операции
+	//  push_back() – добавя елемент в края
+	//  pop_back() – премахва последния елемент
+	//  insert() – вмъква елемент на дадена позиция
+	//  erase() – изтрива елемент
 	int push_back(T newElement) {
 
 		if (lastElement == iSize) {
@@ -86,21 +128,89 @@ public:
 		//return -1;
 	}
 
-	T& at(int position) {
-		/*if(position < 0 || position >= lastElement){
-			std::cout << "No element on this position.\n";
-			return nullptr;
-		}*/
 
-		return this->s_vector[position];
+	// what is better:
+	// to use this->s_vector or to use begin() and end() iterators?
+	T* insert(int pos, T value) {
+		if (pos < 0 || pos > lastElement) {
+			std::cout << "Invalid range.\n";
+			return this->s_vector;
+		}
+
+		if (lastElement == iSize) {
+			iSize *= 2;
+			T* newArr = new T[iSize] {};
+			std::move(begin(), begin() + lastElement, newArr);
+			lastElement++;
+			s_vector = newArr;
+		}
+
+		std::copy_backward(begin() + pos, begin() + lastElement, begin() + lastElement + 1);
+		this->s_vector[pos] = value;
+		lastElement++;
+
+		return this->s_vector;
 	}
 
+	T* erase(int pos) {
+		if (pos < 0 || pos > lastElement) {
+			std::cout << "Invalid range.\n";
+			return this->s_vector;
+		}
+
+		for (T* it = this->s_vector + pos; it != this->s_vector + lastElement - 1; ++it) {
+			*it = *(it + 1);
+		}
+
+		lastElement--;
+
+		return this->s_vector;
+	}
+
+	T* erase(int start, int end) {
+		if (start < 0 || end > lastElement || start >= end) {
+			std::cout << "Invalid range.\n";
+			return this->s_vector;
+		}
+
+		for (T* it = this->s_vector + start; it != this->s_vector + end - 1; ++it) {
+			*it = *(it + 1);
+		}
+		return this.s_vector;
+	}
+
+	// Достъп до елементи
+	//  operator[] – достъп без проверка
+	//  at() – достъп с проверка
+	//  front() – първи елемент
+	//  back() – последен елемент
+	//  data() – pointer към първия елемент
 	SimpleVector& operator=(const SimpleVector& s_vector) {
 		return *this;
 	}
 
+	T& at(int position) {
+		if (position < 0 || position >= lastElement) {
+			throw std::out_of_range("No element on this position.");
+		}
+
+		return this->s_vector[position];
+	}
+
+	T& front() {
+		return at(0);
+	}
+
+	T& back() {
+		return at(lastElement - 1);
+	}
+
+	T* data() {
+		return begin();
+	}
+
 	int size() {
-		return lastElement - 1;
+		return lastElement;
 	}
 
 	bool empty() {
