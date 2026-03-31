@@ -37,6 +37,11 @@ int main()
 
     std::cout << sVector2.at(4) << "\n";
 
+    sVector2.resize(15, -1);
+    for (int* i = sVector2.begin(); i != sVector2.end(); ++i)
+        std::cout << *i << " ";
+    std::cout << "\n";
+
     SimpleVector<std::string> stringVector;
 	stringVector.push_back("Hello");
 	stringVector.push_back("World");

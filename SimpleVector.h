@@ -1,26 +1,3 @@
-
-
-// Достъп до елементи
-//  operator[] – достъп без проверка
-//  at() – достъп с проверка
-//  front() – първи елемент
-//  back() – последен елемент
-//  data() – pointer към първия елемент
-
-// Размер и капацитет
-//  size() – брой елементи
-//  capacity() – заделена памет
-//  resize() – променя броя елементи
-//  reserve() – заделя памет предварително
-//  empty() – дали е празен
-
-// Модификация
-//  clear() – изтрива всички елементи
-//  assign() – заменя съдържанието
-//  swap() – разменя съдържание с друг vector
-
-
-
 #ifndef SIMPLEVECTOR_H
 #define SIMPLEVECTOR_H
 
@@ -209,6 +186,12 @@ public:
 		return begin();
 	}
 
+	// Размер и капацитет
+	//  size() – брой елементи
+	//  capacity() – заделена памет
+	//  resize() – променя броя елементи
+	//  reserve() – заделя памет предварително
+	//  empty() – дали е празен
 	int size() {
 		return lastElement;
 	}
@@ -216,5 +199,48 @@ public:
 	bool empty() {
 		return lastElement == 0;
 	}
+
+	int capacity() {
+		return iSize;
+	}
+
+	void resize(int size) {
+		if(size < 0) {
+			std::cout << "Invalid size.\n";
+			return;
+		}	
+
+		T* newArr = new T[size]{};
+		newArr = std::move(begin(), begin() + lastElement, newArr);
+		s_vector = newArr;
+	}
+
+	void resize(int size, T value) {
+		if (size < 0) {
+			std::cout << "Invalid size.\n";
+			return;
+		}
+
+		iSize = size;
+		T* newArr = new T[iSize]{};
+		std::move(begin(), end(), newArr);
+		for (T* it = newArr + lastElement - 1; it != newArr + size; ++it) {
+			*it = value;			
+		}
+		lastElement = size;
+
+		delete[] s_vector;
+		s_vector = newArr;
+	}
+
+	void reserve(int size) {
+		iSize = size;
+	}
+
+	// Модификация
+	//  clear() – изтрива всички елементи
+	//  assign() – заменя съдържанието
+	//  swap() – разменя съдържание с друг vector
+
 };
 #endif
